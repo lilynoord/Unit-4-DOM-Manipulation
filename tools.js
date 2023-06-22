@@ -24,10 +24,11 @@ function newElement(tag, html, id, classy, parent) {
  */
 function doQuery(query, action) {
 	let qlist = document.querySelectorAll(query);
+	let returnList = [];
 	for (let i of qlist) {
-		action(i);
+		returnList.push(action(i));
 	}
-	return qlist;
+	return qlist, returnList;
 }
 
 export { newElement, doQuery };

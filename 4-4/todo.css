@@ -28,6 +28,14 @@ h1 {
    font-weight: bolder;
 }
 
+ul {
+    font-family: 'Courier New', Courier, monospace;
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    text-shadow: -.1px .1px 0 rgb(255, 255, 255);
+    white-space: normal;
+   font-weight: bolder;
+}
 .submit-button {
     color: white;
     height: 25px;

@@ -10,12 +10,50 @@ function setupTODO() {
 		addTask(taskInput, taskPriority);
 	});
 	manageEventListeners();
+	prioritizenewPage();
 }
 
+function prioritizenewPage() {
+	let taskList = localStorage.getItem("taskList");
+	console.log(taskList);
+	document.querySelector("ul").innerHTML = taskList;
+}
 function addTask(t, p) {
 	const inhtml = `${t.value}`;
 
-	const task = tools.newElement("li", inhtml, undefined, "todo-li", "#todoul");
+	const task = tools.newElement("li", inhtml, t.value, "todo-li", undefined);
+	task.setAttribute(`data-priority`, p.value);
+	prioritize(task);
+}
+
+/**
+ * Reorders the todo list based on their set priority.
+ */
+function prioritize(task) {
+	let qlist = tools.doQuery(".todo-li", function (q) {
+		let x = q;
+		q.remove();
+		return x;
+	});
+	console.log(qlist, "length", qlist.length);
+	let lowestPriority = true;
+	for (let i = 0; i < qlist.length; i++) {
+		console.log(i);
+		if (parseInt(task.dataset.priority) > parseInt(qlist[i].dataset.priority)) {
+			qlist.splice(i, 0, task);
+			lowestPriority = false;
+			break;
+		}
+	}
+	if (lowestPriority) {
+		qlist.push(task);
+	}
+
+	for (let i of qlist) {
+		document.querySelector("#todoul").append(i);
+	}
+
+	localStorage.setItem("taskList", document.querySelector("ul").innerHTML);
 }
 
 function manageEventListeners() {
@@ -27,12 +65,14 @@ function manageEventListeners() {
 			} else {
 				event.target.classList.remove("completed");
 			}
+			localStorage.setItem("taskList", document.querySelector("ul").innerHTML);
 		}
 	});
 
 	todolist.addEventListener("auxclick", function (event) {
 		if (event.target.tagName === "LI") {
 			event.target.remove();
+			localStorage.setItem("taskList", document.querySelector("ul").innerHTML);
 		}
 	});
 }
